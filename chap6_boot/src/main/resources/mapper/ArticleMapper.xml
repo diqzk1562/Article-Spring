@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="yu.chap6.mapper.ArticleMapper">
+	
+	<select id="getAllArticles" resultType="yu.chap6.model.ArticleVO">
+		select article_no, writer, name, title, a.regdate, moddate, read_cnt from article a, member m where a.writer = m.id
+	</select>
+	
+	<insert id="insert" parameterType="yu.chap6.model.ArticleVO" useGeneratedKeys="true" keyProperty="article_no">
+        insert into article(writer, title, regdate, read_cnt) values (#{writer}, #{title}, #{regdate}, #{read_cnt})
+    </insert>
+
+    <insert id="insertContent" parameterType="yu.chap6.model.Article_contentVO">
+        insert into article_content(article_no, content) values (#{article_no}, #{content})
+    </insert>
+    
+    <update id="plus" parameterType="yu.chap6.model.ArticleVO">
+        update article set read_cnt = #{read_cnt} where article_no = #{article_no}
+    </update>
+    
+    <select id="getArticleContentById" resultType="yu.chap6.model.Article_contentVO">
+    	select * from article_content where article_no = #{article_no}
+    </select>
+    
+    <select id="getArticleById" resultType="yu.chap6.model.ArticleVO">
+    	select article_no, writer, name, title, a.regdate, moddate, read_cnt from article a, member m where a.writer = m.id and a.article_no = #{article_no}
+    </select>
+    
+    <update id="updateTitle" parameterType="yu.chap6.model.ArticleVO">
+        update article set title = #{title}, moddate = #{moddate} where article_no = #{article_no}
+    </update>
+    
+    <update id="updateContent" parameterType="yu.chap6.model.Article_contentVO">
+        update article_content set content = #{content} where article_no = #{article_no}
+    </update>
+    
+    <delete id="delete">
+    	delete from article where article_no=#{article_no}
+    </delete>
+    
+    <delete id="deleteContent">
+    	delete from article_content where article_no=#{article_no}
+    </delete>
+
+</mapper>
